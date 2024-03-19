@@ -54,7 +54,7 @@ PRIORITIES = {
 
 
 CARD_PATTERN = r"\(([0-9^\s]+)\)([\S\s^:]+):([\S\s]+)"
-CRITERIA_PATTERN = r"# Acceptance Criteria\n(- [\S\s^\n]+[\n])+"
+CRITERIA_PATTERN = r"# Acceptance Criteria\n\n(- [\S\s^\n]+[\n])+"
 NOTES_PATTERN = r"# Notes\n(- [\w\s^\n]+[\n]*)+"
 
 CARD_REGEX = re.compile(CARD_PATTERN)
@@ -115,14 +115,31 @@ def parse_card(card: dict, lists: dict) -> UserStory:
     priority = PRIORITIES[lists[card["idList"]]["name"].lower()]
 
     points, title, body = CARD_REGEX.match(content).groups()
-
     criteria = []
     notes = []
-    if desc:
-        criteria = parse_bullets(desc[0])
-        if len(desc) > 1:
-            notes = parse_bullets(desc[1])
+    print(desc)
+    found_criteria = False
+    found_notes = False
 
+    for item in desc:
+        if item.startswith('# Acceptance Criteria'):
+            found_criteria = True
+            found_notes = False
+        elif item.startswith('# Notes'):
+            found_notes = True
+            found_criteria = False
+        elif found_criteria:
+            criteria.append(item)
+        elif found_notes:
+            notes.append(item)
+        
+        
+    print(criteria, notes)
+    # if desc:
+    #     criteria = parse_bullets(desc[0])
+    #     if len(desc) > 1:
+    #         notes = parse_bullets(desc[1])
+    
     return UserStory(id_, title, body, priority, points, criteria, notes) 
 
 
