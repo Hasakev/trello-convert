@@ -117,7 +117,7 @@ def parse_card(card: dict, lists: dict) -> UserStory:
     points, title, body = CARD_REGEX.match(content).groups()
     criteria = []
     notes = []
-    print(desc)
+    # print(desc)
     found_criteria = False
     found_notes = False
 
