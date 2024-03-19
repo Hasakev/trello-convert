@@ -134,7 +134,7 @@ def parse_card(card: dict, lists: dict) -> UserStory:
             notes.append(item)
         
         
-    print(criteria, notes)
+    # print(criteria, notes)
     # if desc:
     #     criteria = parse_bullets(desc[0])
     #     if len(desc) > 1:
